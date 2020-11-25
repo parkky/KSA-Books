@@ -49,8 +49,7 @@ STATE = (
 
 
 class SearchForm(forms.Form):
-    BOOK_CHOICE = tuple([('0', '모두')] + [(book.id, str(book)) for book in Book.objects.all()])
-    book = forms.ChoiceField(label='책', choices=BOOK_CHOICE, required=False)
+    book = forms.ModelChoiceField(label='책', queryset=Book.objects.all(), required=False)
     min_worn_degree = forms.ChoiceField(label='낡은 정도', choices=MIN_QUALITY, required=False)
     min_note_degree = forms.ChoiceField(label='필기 정도', choices=MIN_QUALITY, required=False)
     sort = forms.ChoiceField(label='정렬', choices=SORT, required=False)

@@ -1,0 +1,12 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+    <h2>알림 설정</h2>
+    <form method="post">
+        {% csrf_token %}
+        <table>
+            {{ notify_form.as_table }}
+        </table>
+        <input type="submit" value="확인">
+    </form>
+{%  endblock %}

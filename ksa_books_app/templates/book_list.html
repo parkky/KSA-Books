@@ -1,0 +1,39 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+    {% if object_list %}
+        <table>
+        <caption>사용 중인 교과서</caption>
+            <thead>
+                <tr>
+                    <th>교과</th>
+                    <th>과목</th>
+                    <th>제목</th>
+                    <th>저자</th>
+                    <th>출판사</th>
+                    <th>ISBN</th>
+                    <th>정가</th>
+                    <th>공동구매</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for book in object_list %}
+                    {% if book.using %}
+                        <tr>
+                            <td>{{ book.subject }}</td>
+                            <td>{{ book.display_courses }}</td>
+                            <td>{{ book.title }}</td>
+                            <td>{{ book.author }}</td>
+                            <td>{{ book.publisher }}</td>
+                            <td>{{ book.isbn }}</td>
+                            <td>{{ book.list_price }}</td>
+                            <td>{{ book.group_price }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>There are no books registered.</p>
+    {% endif %}
+{% endblock %}

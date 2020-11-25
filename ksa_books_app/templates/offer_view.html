@@ -1,0 +1,124 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+    <p>책: {{ offer.book.title }}</p>
+    <p>가격: {{ offer.price }}</p>
+    <p>판매자: {{ offer.seller }}</p>
+    {% if offer.buyer %}
+        <p>구매자: {{ offer.buyer }}</p>
+    {% else %}
+        <p>구매자: 없음</p>
+    {% endif %}
+    <p>낡은 정도: {{ offer.get_worn_degree_display }}<br>{{ offer.worn_explain }}</p>
+    <p>필기 정도: {{ offer.get_note_degree_display }}<br>{{ offer.note_explain }}</p>
+    <br>
+    {% if offer.seller == user %}
+        {% if offer.buyer %}
+            {% if offer.seller_done %}
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="sell-done-cancel" value="True">
+                    <input type="submit" value="거래 완료 취소">
+                </form>
+            {% else %}
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="sell-cancel" value="True">
+                    <input type="submit" value="판매 취소">
+                </form>
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="sell-done" value="True">
+                    <input type="submit" value="거래 완료">
+                </form>
+            {% endif %}
+        {% elif want_users.exists %}
+            <form method="post">
+                {% csrf_token %}
+                <label for="buyer">구매자:</label>
+                <select name="sell-to" id="buyer">
+                    {% for want_user in want_users %}
+                        <option value="{{ want_user.id }}">{{ want_user }}</option>
+                    {% endfor %}
+                </select>
+                <input type="submit" value="판매">
+            </form>
+        {% else %}
+            <p>구매를 원하는 사람이 없음</p>
+        {% endif %}
+        <a href="{% url 'update-offer' pk=offer.pk %}">Update</a>
+        <a href="{% url 'delete-offer' pk=offer.pk %}">Delete</a>
+    {% elif user in want_users %}
+        {% if offer.buyer == user %}
+            {% if offer.buyer_done %}
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="buy-done-cancel" value="True">
+                    <input type="submit" value="거래 완료 취소">
+                </form>
+            {% else %}
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="want-cancel" value="True">
+                    <input type="submit" value="구매 취소">
+                </form>
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="buy-done" value="True">
+                    <input type="submit" value="거래 완료">
+                </form>
+            {% endif %}
+        {% endif %}
+    {% elif offer.buyer is None %}
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="want" value="True">
+            <input type="submit" value="구매 신청">
+        </form>
+    {% endif %}
+    <br>
+    <form method="post">
+        {% csrf_token %}
+        <table>
+            {{ comment_form.as_table }}
+        </table>
+        <input type="submit" value="댓글 달기">
+    </form>
+    <br>
+    <table>
+        <tbody>
+            {% for comment in comment_list %}
+                {% if not comment.secret or comment.sender == user or comment.receiver == user %}
+                    <tr>
+                        <td>
+                            <p>
+                                {{ comment.sender }}
+                                {% if offer.seller == comment.sender and comment.receiver %}
+                                    ->{{ comment.receiver }}
+                                {% endif %}
+                                {{ comment.date_time }}
+                                {% if comment.secret %}
+                                    (비밀글)
+                                {% endif %}
+                            </p>
+                            <p>{{ comment.text }}</p>
+                            {% if comment.sender == user %}
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="delete_comment" value={{ comment.id }}>
+                                    <input type="submit" value="삭제">
+                                </form>
+                            {% elif offer.seller == user %}
+                                <form method="get">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="receiver" value={{ comment.sender.student_id }}>
+                                    <input type="submit" value="답글">
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

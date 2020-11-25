@@ -1,0 +1,60 @@
+{% load tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        table, th, td {
+            border: 1px solid #000000;
+            border-collapse: collapse;
+            padding: 5px;
+        }
+    </style>
+    {% block style %}{% endblock %}
+    <meta charset="UTF-8">
+    <title>KSABooks</title>
+</head>
+<body>
+    <a href="{% url 'home' %}">시작</a>
+    <a href="{% url 'about' %}">정보</a>
+    <a href="{% url 'sell' %}">판매하기</a>
+    <a href="{% url 'search' %}">검색</a>
+    <a href="{% url 'my-offers' %}">내 거래</a>
+    <a href="{% url 'past-transaction' %}">종료된 거래</a>
+    <a href="{% url 'book-list' %}">교과서 목록</a>
+    {% if user.unread_notification == 0 or not user.is_authenticated %}
+        <a href="{% url 'notification' %}">알림</a>
+    {% else %}
+        <a href="{% url 'notification' %}">알림({{ user.unread_notification }})</a>
+    {% endif %}
+    <a href="{% url 'setting' %}">설정</a>
+    {% if user.is_authenticated %}
+        <a href="{% url 'logout' %}">로그아웃</a>
+    {% else %}
+        <a href="{% url 'login' %}">로그인</a>
+    {% endif %}
+    {% if user.is_authenticated %}
+        {{ user }}
+    {% endif %}
+
+    {% block content %}{% endblock %}
+
+    {% block pagination %}
+        {% if is_paginated %}
+            <div>
+                <span>
+                    {% if page_obj.has_previous %}
+                        <a href="?{% url_replace request 'page' page_obj.previous_page_number %}">이전</a>
+                    {% endif %}
+                    <span>
+                        페이지 {{ page_obj.number }}/{{ page_obj.paginator.num_pages }}.
+                    </span>
+                    {% if page_obj.has_next %}
+                        <a href="?{% url_replace request 'page' page_obj.next_page_number %}">다음</a>
+                    {% endif %}
+                </span>
+            </div>
+        {% endif %}
+    {% endblock %}
+</body>
+</html>

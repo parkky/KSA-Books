@@ -1,0 +1,45 @@
+{% extends 'base_generic.html' %}
+
+{% block style %}
+    <style>
+        .old
+        {
+            color: rgba(0, 0, 0, 0.5);
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <br>
+    {% for html in html_list %}
+        <br>
+        {% if forloop.counter0 < new_notification %}
+            {% for phrase in html %}
+                {% if forloop.last %}
+                    <span> {{ phrase }}</span>
+                {% else %}
+                    {% if phrase.0 == 'text' %}
+                        <span>{{ phrase.1 }}</span>
+                    {% elif phrase.0 == 'link' %}
+                        <a href="{{ phrase.2 }}">{{ phrase.1 }}</a>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            {% if forloop.counter0 == new_notification and new_notification != 0 %}
+                <br>
+            {% endif %}
+            {% for phrase in html %}
+                {% if forloop.last %}
+                    <span class="old"> {{ phrase }}</span>
+                {% else %}
+                    {% if phrase.0 == 'text' %}
+                        <span class="old">{{ phrase.1 }}</span>
+                    {% elif phrase.0 == 'link' %}
+                        <a href="{{ phrase.2 }}">{{ phrase.1 }}</a>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+{% endblock %}

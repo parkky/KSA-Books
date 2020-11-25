@@ -1,0 +1,1 @@
+web: gunicorn KSABooks.wsgi:application --log-file -

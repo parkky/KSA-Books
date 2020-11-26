@@ -15,6 +15,7 @@ import os
 import django_heroku
 import dj_database_url
 import dotenv
+from .setting_secret import SECRET_KEY
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,7 +25,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '_7y5$z$@^96+5k1yg8-c0*^(a!9o76)or#!!f^=!o!ze*ck=2t'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

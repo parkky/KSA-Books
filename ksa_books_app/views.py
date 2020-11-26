@@ -255,8 +255,8 @@ def load_data(request):
     subjects = f_subject.read().splitlines()
     subjects_inst = []
     for s in subjects:
-        subjects_inst.append(Subject(name=s))
-    Subject.objects.all().delete()
+        if not Subject.objects.filter(name=s).exists():
+            subjects_inst.append(Subject(name=s))
     Subject.objects.bulk_create(subjects_inst)
 
     COURSE_VARIABLE_NUM = 2
@@ -267,8 +267,8 @@ def load_data(request):
     # plus 1 for blank lines
     courses_inst = []
     for i in range(len(c)):
-        courses_inst.append(Course(subject=Subject.objects.get(name=c[i][SUBJECT]), name=c[i][NAME], open=True))
-    Course.objects.all().delete()
+        if not Course.objects.filter(name=c[i][NAME]).exists():
+            courses_inst.append(Course(subject=Subject.objects.get(name=c[i][SUBJECT]), name=c[i][NAME], open=True))
     Course.objects.bulk_create(courses_inst)
 
     BOOK_VARIABLE_NUM = 7
@@ -276,18 +276,17 @@ def load_data(request):
     f_book = open('ksa_books_app/data/book.txt', 'r', encoding='utf-8')
     books = f_book.read().splitlines()
     b = [books[i:i+BOOK_VARIABLE_NUM+1] for i in range(0, len(books), BOOK_VARIABLE_NUM+1)]  # plus 1 for blank lines
-    books_inst = []
-    Book.objects.all().delete()
     for i in range(len(b)):
-        list_price = None if int(b[i][LIST_PRICE]) == 0 else int(b[i][LIST_PRICE])
-        group_price = None if int(b[i][GROUP_PRICE]) == 0 else int(b[i][GROUP_PRICE])
-        books_inst.append(Book(title=b[i][TITLE], author=b[i][AUTHOR], publisher=b[i][PUBLISHER], isbn=b[i][ISBN],
-                               list_price=list_price, group_price=group_price, using=True))
-        books_inst[i].save()
-        course_list = b[i][COURSES].split(',')
-        books_inst[i].subject = Course.objects.get(name=course_list[0]).subject
-        for c in course_list:
-            books_inst[i].courses.add(Course.objects.get(name=c))
-        books_inst[i].save()
+        if not Book.objects.filter(title=b[i][TITLE]).exists():
+            list_price = None if int(b[i][LIST_PRICE]) == 0 else int(b[i][LIST_PRICE])
+            group_price = None if int(b[i][GROUP_PRICE]) == 0 else int(b[i][GROUP_PRICE])
+            books_inst = Book(title=b[i][TITLE], author=b[i][AUTHOR], publisher=b[i][PUBLISHER], isbn=b[i][ISBN],
+                              list_price=list_price, group_price=group_price, using=True)
+            books_inst.save()
+            course_list = b[i][COURSES].split(',')
+            books_inst.subject = Course.objects.get(name=course_list[0]).subject
+            for c in course_list:
+                books_inst.courses.add(Course.objects.get(name=c))
+            books_inst.save()
     context = dict()
     return render(request, 'load_data.html', context=context)

@@ -66,7 +66,7 @@ class NotificationSettingForm(forms.ModelForm):
     notify_books = forms.ModelMultipleChoiceField(
         queryset=Book.objects.all(),
         widget=forms.CheckboxSelectMultiple,
-        label='원하는 책',
+        label='원하는 책 선택',
         required=False
     )
 

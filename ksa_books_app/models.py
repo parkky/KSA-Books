@@ -22,11 +22,11 @@ class Course(models.Model):
 
 
 class Book(models.Model):
-    title = models.CharField(max_length=50, verbose_name='제목')
+    title = models.CharField(max_length=100, verbose_name='제목')
     author = models.CharField(max_length=100, verbose_name='저자')
     courses = models.ManyToManyField(Course, verbose_name='과목')
     subject = models.ForeignKey(Subject, verbose_name='교과', on_delete=models.SET_NULL, null=True)
-    publisher = models.CharField(max_length=50, verbose_name='출판사')
+    publisher = models.CharField(max_length=100, verbose_name='출판사')
     isbn = models.CharField(max_length=13, verbose_name='ISBN',
                             help_text='13 Character <a href="https://www.isbn-international.org/content/what-isbn">ISBN number</a>')
     # link = models.URLField(max_length=300, verbose_name='책 링크')

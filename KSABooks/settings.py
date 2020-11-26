@@ -15,7 +15,7 @@ import os
 import django_heroku
 import dj_database_url
 import dotenv
-from .setting_secret import SECRET_KEY
+from .setting_secret import secret_key
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,11 +26,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
+SECRET_KEY = os.getenv('SECRET_KEY', secret_key)
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.herokuapp.com']
-
 
 # Application definition
 

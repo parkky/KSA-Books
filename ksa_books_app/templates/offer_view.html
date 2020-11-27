@@ -59,17 +59,17 @@
             {% else %}
                 <form method="post">
                     {% csrf_token %}
-                    <input type="hidden" name="want-cancel" value="True">
-                    <input type="submit" value="구매 취소">
-                </form>
-                <form method="post">
-                    {% csrf_token %}
                     <input type="hidden" name="buy-done" value="True">
                     <input type="submit" value="거래 완료">
                 </form>
             {% endif %}
         {% endif %}
-    {% elif offer.buyer is None %}
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="want-cancel" value="True">
+            <input type="submit" value="구매 취소">
+        </form>
+    {% elif not offer.seller_done %}
         <form method="post">
             {% csrf_token %}
             <input type="hidden" name="want" value="True">

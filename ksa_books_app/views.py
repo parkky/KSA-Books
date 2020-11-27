@@ -9,6 +9,8 @@ from .forms import NEW, CHEAP
 from .forms import UNSOLD, UNEXCHANGED, ALL
 from django.core.paginator import Paginator
 from django.contrib.auth.mixins import UserPassesTestMixin
+from secrets import choice
+from string import ascii_letters, digits
 
 
 def create_notification(user_qs, type, user1=None, offer1=None):
@@ -90,19 +92,20 @@ def search_view(request):
     form = SearchForm(request.GET)
     if form.is_valid():
         data = form.cleaned_data
-        if data['book'] and data['book'] != '0':
+        print(data)
+        if data['book']:
             qs = qs.filter(book_id=data['book'])
         if data['min_worn_degree']:
             qs = qs.filter(worn_degree__in=data['min_worn_degree'])
         if data['min_note_degree']:
             qs = qs.filter(note_degree__in=data['min_note_degree'])
-        if data['state'] == UNSOLD:
+        if data['state'] == UNSOLD or data['state'] == '':
             qs = qs.filter(buyer=None)
         elif data['state'] == UNEXCHANGED:
             qs = qs.exclude(seller_done=True, buyer_done=True)
         elif data['state'] == ALL:
             pass
-        if data['sort'] == NEW:
+        if data['sort'] == NEW or data['sort'] == '':
             qs = qs.order_by('date_time')
         elif data['sort'] == CHEAP:
             qs = qs.order_by('price')
@@ -141,8 +144,7 @@ def offer_view(request, pk):
             create_notification(StudentUser.objects.filter(id=offer.seller.id), COMMENT, user1=request.user, offer1=offer)
         if 'want' in request.POST:
             offer.want_users.add(request.user)
-            if request.user != offer.seller:
-                create_notification(StudentUser.objects.filter(id=offer.seller.id), NEW_WANT, user1=request.user, offer1=offer)
+            create_notification(StudentUser.objects.filter(id=offer.seller.id), NEW_WANT, user1=request.user, offer1=offer)
         elif 'want-cancel' in request.POST:
             offer.want_users.remove(request.user)
             if offer.buyer == request.user:
@@ -180,7 +182,7 @@ def offer_view(request, pk):
 @login_required
 def my_offers(request):
     sell_offers = Offer.objects.filter(seller=request.user).filter(seller_done=False)
-    buy_offers = Offer.objects.filter(buyer=request.user).filter(buyer_done=False)
+    buy_offers = Offer.objects.filter(want_users=request.user).filter(buyer_done=False)
     context = {
         'sell_offers': sell_offers,
         'buy_offers': buy_offers,
@@ -249,6 +251,11 @@ def setting(request):
     return render(request, 'setting.html', context=context)
 
 
+def generate_password(length):
+    used_char = ascii_letters + digits
+    return ''.join([choice(used_char) for i in range(length)])
+
+
 @permission_required('load_data')
 def load_data(request):
     f_subject = open('ksa_books_app/data/subject.txt', 'r', encoding='utf-8')
@@ -288,5 +295,18 @@ def load_data(request):
             for c in course_list:
                 books_inst.courses.add(Course.objects.get(name=c))
             books_inst.save()
+
+    STUDENT_VARIABLE_NUM = 2
+    (ID, NAME) = tuple(range(STUDENT_VARIABLE_NUM))
+    f_student = open('ksa_books_app/data/student.txt', 'r', encoding='utf-8')
+    students = f_student.read().splitlines()
+    s = [students[i:i+STUDENT_VARIABLE_NUM+1] for i in range(0, len(students), STUDENT_VARIABLE_NUM+1)]
+    # plus 1 for blank lines
+    students_inst = []
+    for i in range(len(s)):
+        if not StudentUser.objects.filter(student_id=s[i][ID]).exists():
+            students_inst.append(StudentUser(student_id=s[i][ID], name=s[i][NAME], password=generate_password(15)))
+    StudentUser.objects.bulk_create(students_inst)
+
     context = dict()
     return render(request, 'load_data.html', context=context)

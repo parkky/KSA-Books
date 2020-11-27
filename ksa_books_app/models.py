@@ -177,3 +177,6 @@ class StudentUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return ' '.join([self.student_id, self.name])
+
+    def is_international(self):
+        return self.student_id[3] == '2'

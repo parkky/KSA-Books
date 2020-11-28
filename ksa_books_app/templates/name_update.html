@@ -1,0 +1,12 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+    <p>Change your name:</p>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Change">
+    </form>
+    <p>Please do not change it to anything other than your real name.</p>
+    <p>(This function is only for international students)</p>
+{% endblock %}

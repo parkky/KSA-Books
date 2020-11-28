@@ -36,6 +36,9 @@
     {% endif %}
     {% if user.is_authenticated %}
         {{ user }}
+        {% if user.is_international %}
+            <a href="{% url 'change-name' %}">Change Name</a>
+        {% endif %}
     {% endif %}
 
     {% block content %}{% endblock %}

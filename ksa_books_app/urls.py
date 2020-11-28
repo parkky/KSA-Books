@@ -18,6 +18,7 @@ urlpatterns = [
     path('notification/', views.notification, name='notification'),
     path('setting/', views.setting, name='setting'),
     path('load-data/', views.load_data, name='load-data'),
+    path('change-name', views.name_update, name='change-name'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('admin/', admin.site.urls),
 ]

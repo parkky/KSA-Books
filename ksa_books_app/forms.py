@@ -74,3 +74,9 @@ class NotificationSettingForm(forms.ModelForm):
         model = StudentUser
         fields = ['notify_new_offer', 'notify_books', 'notify_comment', 'notify_sold_to_user', 'notify_sold_to_other',
                   'notify_new_want']
+
+
+class ChangeNameForm(forms.ModelForm):
+    class Meta:
+        model = StudentUser
+        fields = ['name']

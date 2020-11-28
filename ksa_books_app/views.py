@@ -4,7 +4,7 @@ from .models import Book, Course, Subject, Offer, Comment, StudentUser, Notifica
 from .models import COMMENT, NEW_OFFER, SOLD_TO_USER, SOLD_TO_OTHER, NEW_WANT
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import permission_required, login_required
-from .forms import SearchForm, CommentForm, OfferForm, OfferUpdateForm, NotificationSettingForm
+from .forms import SearchForm, CommentForm, OfferForm, OfferUpdateForm, NotificationSettingForm, ChangeNameForm
 from .forms import NEW, CHEAP
 from .forms import UNSOLD, UNEXCHANGED, ALL
 from django.core.paginator import Paginator
@@ -249,6 +249,23 @@ def setting(request):
         'notify_form': notify_form,
     }
     return render(request, 'setting.html', context=context)
+
+
+def name_update(request):
+    if not request.user.is_international():
+        context = dict()
+        return render(request, 'name_update_denied.html', context=context)
+    if request.method == 'POST':
+        name_form = ChangeNameForm(request.POST)
+        if name_form.is_valid():
+            data = name_form.cleaned_data
+            request.user.name = data['name']
+            request.user.save()
+    form = ChangeNameForm(initial={'name': request.user.name})
+    context = {
+        'form': form,
+    }
+    return render(request, 'name_update.html', context=context)
 
 
 def generate_password(length):

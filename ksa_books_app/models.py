@@ -156,7 +156,7 @@ class StudentUser(AbstractBaseUser, PermissionsMixin):
     objects = StudentUserManager()
     student_id = models.CharField(max_length=10, verbose_name='학번', help_text='00-000', unique=True)
     name = models.CharField(max_length=100, verbose_name='이름')
-    email = models.EmailField(default=f'{student_id}@ksa.hs.kr')
+    email = models.EmailField()
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)

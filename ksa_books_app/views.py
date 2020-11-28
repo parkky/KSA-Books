@@ -305,7 +305,8 @@ def load_data(request):
     students_inst = []
     for i in range(len(s)):
         if not StudentUser.objects.filter(student_id=s[i][ID]).exists():
-            students_inst.append(StudentUser(student_id=s[i][ID], name=s[i][NAME], password=generate_password(15)))
+            students_inst.append(StudentUser(student_id=s[i][ID], name=s[i][NAME], email=f'{s[i][ID]}@ksa.hs.kr',
+                                             password=generate_password(15)))
     StudentUser.objects.bulk_create(students_inst)
 
     context = dict()

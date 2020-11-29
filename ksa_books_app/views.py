@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import UpdateView, DeleteView, ListView
 from .models import Book, Course, Subject, Offer, Comment, StudentUser, Notification
 from .models import COMMENT, NEW_OFFER, SOLD_TO_USER, SOLD_TO_OTHER, NEW_WANT
@@ -58,7 +58,7 @@ def offer_create(request):
                                          note_degree=data['note_degree'], note_explain=data['note_explain'])
             notify_users = StudentUser.objects.filter(notify_books=request.POST.get('book')).exclude(id=request.user.id)
             create_notification(notify_users, NEW_OFFER, user1=request.user, offer1=offer)
-            form = OfferForm()
+            return redirect('my-offers')
     else:
         form = OfferForm()
     context = {

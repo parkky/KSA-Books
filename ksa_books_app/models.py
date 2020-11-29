@@ -72,7 +72,7 @@ class Offer(models.Model):
     note_explain = models.TextField(verbose_name='설명', null=True, blank=True)
     other = models.TextField(verbose_name='기타 내용', null=True, blank=True)
     date_time = models.DateTimeField(auto_now_add=True, null=True)
-    views = models.IntegerField(default=0)
+    views = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='views')
 
     def get_absolute_url(self):
         return reverse('check-offer', args=[str(self.id)])

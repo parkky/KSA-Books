@@ -123,6 +123,9 @@ def search_view(request):
 @login_required
 def offer_view(request, pk):
     offer = Offer.objects.get(pk=pk)
+    if not offer.views.filter(pk=request.user.pk).exists():
+        offer.views.add(request.user)
+    views = offer.views.all().count()
     want_users = offer.want_users.all()
     if offer.seller == request.user:
         if 'receiver' in request.GET:
@@ -172,6 +175,7 @@ def offer_view(request, pk):
     comment_list = Comment.objects.filter(offer=offer, is_deleted=False)
     context = {
         'offer': offer,
+        'views': views,
         'comment_form': comment_form,
         'comment_list': comment_list,
         'want_users': want_users,

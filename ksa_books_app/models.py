@@ -162,7 +162,7 @@ class StudentUser(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now_add=True)
-    notifications = models.ManyToManyField(Notification)
+    notifications = models.ManyToManyField(Notification, blank=True)
     unread_notification = models.PositiveIntegerField(default=0)
 
     notify_books = models.ManyToManyField(Book, verbose_name='원하는 책', blank=True)

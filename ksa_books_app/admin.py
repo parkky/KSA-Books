@@ -48,8 +48,10 @@ class UserAdmin(BaseUserAdmin):
     add_form = UserCreationForm
     fieldsets = (
         (None, {'fields': ('student_id', 'name', 'email')}),
-        ('Notifications', {'fields': ('notify_books', 'unread_notification')}),
-        ('Permissions', {'fields': ('is_admin',)}),
+        ('Notifications', {'fields': ('notify_new_offer', 'notify_books', 'notify_comment', 'notify_sold_to_user',
+                                      'notify_sold_to_other', 'notify_new_want', 'notifications',
+                                      'unread_notification')}),
+        ('Permissions', {'fields': ('is_admin', 'is_superuser', 'is_staff')}),
     )
     add_fieldsets = (
         (None, {

@@ -145,10 +145,17 @@ def offer_view(request, pk):
             data = form.cleaned_data
             Comment.objects.create(sender=request.user, receiver=receiver, text=data['text'],
                                    secret=data['secret'], offer=offer)
-            create_notification(StudentUser.objects.filter(id=offer.seller.id), COMMENT, user1=request.user, offer1=offer)
+            if receiver is None:
+                if request.user != offer.seller:
+                    create_notification(StudentUser.objects.filter(id=offer.seller.id), COMMENT, user1=request.user,
+                                        offer1=offer)
+            else:
+                create_notification(StudentUser.objects.filter(id=receiver.id), COMMENT, user1=request.user,
+                                    offer1=offer)
         if 'want' in request.POST:
             offer.want_users.add(request.user)
-            create_notification(StudentUser.objects.filter(id=offer.seller.id), NEW_WANT, user1=request.user, offer1=offer)
+            create_notification(StudentUser.objects.filter(id=offer.seller.id), NEW_WANT, user1=request.user,
+                                offer1=offer)
         elif 'want-cancel' in request.POST:
             offer.want_users.remove(request.user)
             if offer.buyer == request.user:

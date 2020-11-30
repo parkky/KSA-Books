@@ -11,6 +11,7 @@
     {% endif %}
     <p>낡은 정도: {{ offer.get_worn_degree_display }}<br>{{ offer.worn_explain }}</p>
     <p>필기 정도: {{ offer.get_note_degree_display }}<br>{{ offer.note_explain }}</p>
+    <p>{{ offer.other }}</p>
     <p>읽은 사람: {{ views }}명</p>
     <br>
     {% if offer.seller == user %}

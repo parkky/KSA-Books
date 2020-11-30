@@ -59,7 +59,7 @@ class SearchForm(forms.Form):
 class CommentForm(forms.Form):
     secret = forms.BooleanField(label='비밀글', required=False)
     receiver = forms.CharField(label='받는 사람', disabled=True, required=False)
-    text = forms.CharField(widget=forms.Textarea, label='댓글 입력')
+    text = forms.CharField(widget=forms.Textarea(attrs={'placeholder': '카톡 사용을 권장'}), label='댓글 입력')
 
 
 class NotificationSettingForm(forms.ModelForm):

@@ -55,7 +55,8 @@ def offer_create(request):
             data = form.cleaned_data
             offer = Offer.objects.create(seller=request.user, book=data['book'], price=data['price'],
                                          worn_degree=data['worn_degree'], worn_explain=data['worn_explain'],
-                                         note_degree=data['note_degree'], note_explain=data['note_explain'])
+                                         note_degree=data['note_degree'], note_explain=data['note_explain'],
+                                         other=data['other'])
             notify_users = StudentUser.objects.filter(notify_books=request.POST.get('book')).exclude(id=request.user.id)
             create_notification(notify_users, NEW_OFFER, user1=request.user, offer1=offer)
             return redirect('my-offers')

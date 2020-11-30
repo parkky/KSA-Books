@@ -145,11 +145,7 @@ def offer_view(request, pk):
             data = form.cleaned_data
             Comment.objects.create(sender=request.user, receiver=receiver, text=data['text'],
                                    secret=data['secret'], offer=offer)
-            if receiver is None:
-                if request.user != offer.seller:
-                    create_notification(StudentUser.objects.filter(id=offer.seller.id), COMMENT, user1=request.user,
-                                        offer1=offer)
-            else:
+            if receiver is not None:
                 create_notification(StudentUser.objects.filter(id=receiver.id), COMMENT, user1=request.user,
                                     offer1=offer)
         if 'want' in request.POST:

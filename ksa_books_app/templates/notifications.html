@@ -22,7 +22,7 @@
                         {% if phrase.0 == 'text' %}
                             <span>{{ phrase.1 }}</span>
                         {% elif phrase.0 == 'link' %}
-                            <a href="{{ phrase.2 }}">{{ phrase.1 }}</a>
+                            <a href="{{ phrase.2 }}" target="_blank">{{ phrase.1 }}</a>
                         {% endif %}
                     {% endif %}
                 {% endfor %}
@@ -37,7 +37,7 @@
                         {% if phrase.0 == 'text' %}
                             <span class="old">{{ phrase.1 }}</span>
                         {% elif phrase.0 == 'link' %}
-                            <a href="{{ phrase.2 }}">{{ phrase.1 }}</a>
+                            <a href="{{ phrase.2 }}" target="_blank">{{ phrase.1 }}</a>
                         {% endif %}
                     {% endif %}
                 {% endfor %}

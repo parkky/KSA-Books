@@ -4,31 +4,31 @@
     {% if user.is_authenticated %}
         <h3>거래 시작하기</h3>
         <h5>교과서 판매</h5>
-        <p>1. <a href="{% url 'sell' %}">판매하기</a>를 클릭한다.</p>
+        <p>1. <a href="{% url 'sell' %}" target="_blank">판매하기</a>를 클릭한다.</p>
         <p>2. 책 정보를 입력하고 확인을 누른다.</p>
-        <p>3. <a href="{% url 'my-offers' %}">내 거래</a>에 들어가면 거래 페이지를 확인할 수 있다.
-            (<a href="{% url 'search' %}">검색</a>에는 본인의 책은 나오지 않으니 주의)</p>
-        <p>4. 누군가 책을 구매 신청하면 알림이 온다(<a href="{% url 'setting' %}">설정</a>에서 변경 가능).</p>
+        <p>3. <a href="{% url 'my-offers' %}" target="_blank">내 거래</a>에 들어가면 거래 페이지를 확인할 수 있다.
+            (<a href="{% url 'search' %}" target="_blank">검색</a>에는 본인의 책은 나오지 않으니 주의)</p>
+        <p>4. 누군가 책을 구매 신청하면 알림이 온다(<a href="{% url 'setting' %}" target="_blank">설정</a>에서 변경 가능).</p>
         <p>5. 구매자와 거래 약속을 잡는다.</p>
         <p>6. 약속을 잡고 나면 거래 페이지에서 구매자를 선택한 뒤 '판매'를 누른다.</p>
         <p>7. 거래를 마친 뒤 '거래 완료'를 누른다.</p>
-        <p>8. 만약 다시 확인하고 싶다면 <a href="{% url 'past-transaction' %}">종료된 거래</a>에서 확인할 수 있다.</p>
+        <p>8. 만약 다시 확인하고 싶다면 <a href="{% url 'past-transaction' %}" target="_blank">종료된 거래</a>에서 확인할 수 있다.</p>
         <h5>교과서 구매</h5>
-        <p>1. <a href="{% url 'search' %}">검색</a>에 들어가서 원하는 책을 찾는다.</p>
+        <p>1. <a href="{% url 'search' %}" target="_blank">검색</a>에 들어가서 원하는 책을 찾는다.</p>
         <p>2. 페이지에 들어가서 정보를 확인한다.</p>
         <p>3. 구매를 원하면 '구매 신청'을 누른다.(이미 구매자가 있다면 버튼이 없음)</p>
         <p>4. 판매자와 거래 약속을 잡고, 판매자가 '판매'를 누르기를 기다린다.
-            누르면 알림이 오고(<a href="{% url 'setting' %}">설정</a>에서 변경 가능), 구매자에 자신이 보인다.</p>
+            누르면 알림이 오고(<a href="{% url 'setting' %}" target="_blank">설정</a>에서 변경 가능), 구매자에 자신이 보인다.</p>
         <p>5. 거래를 마친 뒤 '거래 완료'를 누른다.</p>
-        <p>6. 만약 다시 확인하고 싶다면 <a href="{% url 'past-transaction' %}">종료된 거래</a>에서 확인할 수 있다.</p>
+        <p>6. 만약 다시 확인하고 싶다면 <a href="{% url 'past-transaction' %}" target="_blank">종료된 거래</a>에서 확인할 수 있다.</p>
     {% else %}
         <h3>계정 사용 방법</h3>
         <p>이 사이트에 이미 모든 학생의 계정이 생성되어 있어서 계정을 만들 필요는 없음.
             자신의 계정의 비밀번호를 원하는 것으로 바꾸면 그 계정을 사용할 수 있음.</p>
-        <p>1. <a href="{% url 'password_reset' %}">비밀번호 변경</a>에 들어간다.</p>
+        <p>1. <a href="{% url 'password_reset' %}" target="_blank">비밀번호 변경</a>에 들어간다.</p>
         <p>2. 자신의 학교 이메일을 입력한다.</p>
         <p>3. ksabooks1@gmail.com에서 이메일이 오면 링크를 클릭한다.(안 오면 스팸함 반드시 확인)</p>
         <p>4. 계정 비밀번호를 변경한다.</p>
-        <p>5. 학번과 새 비밀번호로 <a href="{% url 'login' %}">로그인</a>한다.</p>
+        <p>5. 학번과 새 비밀번호로 <a href="{% url 'login' %}" target="_blank">로그인</a>한다.</p>
     {% endif %}
 {% endblock %}

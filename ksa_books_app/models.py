@@ -96,8 +96,10 @@ class Comment(models.Model):
         return self.text
 
 
-notifications_list = ['Comment', 'New offer', 'Sold to user', 'Sold to other', 'New want']
-COMMENT, NEW_OFFER, SOLD_TO_USER, SOLD_TO_OTHER, NEW_WANT = tuple([str(i) for i in range(len(notifications_list))])
+notifications_list = ['Comment', 'New offer', 'Sold to user', 'Sold to other', 'New want', 'Buyer cancel',
+                      'Seller cancel']
+COMMENT, NEW_OFFER, SOLD_TO_USER, SOLD_TO_OTHER, NEW_WANT, BUYER_CANCEL, SELLER_CANCEL = \
+    tuple([str(i) for i in range(len(notifications_list))])
 NOTIFICATIONS = tuple([(str(i), notifications_list[i]) for i in range(len(notifications_list))])
 
 
@@ -132,6 +134,14 @@ class Notification(models.Model):
             html.append((TEXT, f'{self.data_user1}이(가) '))
             html.append((LINK, self.data_offer1.book.title, self.data_offer1.get_absolute_url()))
             html.append((TEXT, '을(를) 구매 신청했습니다.'))
+        elif self.type == BUYER_CANCEL:
+            html.append((TEXT, f'{self.data_user1}이(가) '))
+            html.append((LINK, self.data_offer1.book.title, self.data_offer1.get_absolute_url()))
+            html.append((TEXT, ' 구매를 취소했습니다.'))
+        elif self.type == SELLER_CANCEL:
+            html.append((TEXT, f'{self.data_user1}이(가) '))
+            html.append((LINK, self.data_offer1.book.title, self.data_offer1.get_absolute_url()))
+            html.append((TEXT, ' 판매를 취소했습니다.'))
         html.append(self.date_time)
         return html
 

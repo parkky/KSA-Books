@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic import UpdateView, DeleteView, ListView
 from .models import Book, Course, Subject, Offer, Comment, StudentUser, Notification
-from .models import COMMENT, NEW_OFFER, SOLD_TO_USER, SOLD_TO_OTHER, NEW_WANT
+from .models import COMMENT, NEW_OFFER, SOLD_TO_USER, SOLD_TO_OTHER, NEW_WANT, BUYER_CANCEL, SELLER_CANCEL
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import permission_required, login_required
 from .forms import SearchForm, CommentForm, OfferForm, OfferUpdateForm, NotificationSettingForm, ChangeNameForm
@@ -155,25 +155,33 @@ def offer_view(request, pk):
         elif 'want-cancel' in request.POST:
             offer.want_users.remove(request.user)
             if offer.buyer == request.user:
+                create_notification(StudentUser.objects.filter(id=offer.seller.id), BUYER_CANCEL, user1=request.user,
+                                    offer1=offer)
                 offer.buyer = None
+                offer.buyer_done = False
+                offer.seller_done = False
         elif 'sell-to' in request.POST:
             offer.buyer = StudentUser.objects.get(id=request.POST.get('sell-to'))
-            create_notification(StudentUser.objects.filter(id=offer.buyer.id), SOLD_TO_USER, user1=request.user, offer1=offer)
+            create_notification(StudentUser.objects.filter(id=offer.buyer.id), SOLD_TO_USER, user1=request.user,
+                                offer1=offer)
             create_notification(want_users.exclude(id=offer.buyer.id), SOLD_TO_OTHER, user1=request.user, offer1=offer)
         elif 'sell-cancel' in request.POST:
+            create_notification(StudentUser.objects.filter(id=offer.buyer.id), SELLER_CANCEL, user1=request.user,
+                                offer1=offer)
             offer.buyer = None
-        elif 'sell-done' in request.POST:
-            offer.seller_done = True
-        elif 'sell-done-cancel' in request.POST:
+            offer.buyer_done = False
             offer.seller_done = False
         elif 'buy-done' in request.POST:
             offer.buyer_done = True
         elif 'buy-done-cancel' in request.POST:
             offer.buyer_done = False
+        elif 'sell-done' in request.POST:
+            offer.seller_done = True
+        elif 'sell-done-cancel' in request.POST:
+            offer.seller_done = False
         elif 'delete_comment' in request.POST:
             delete_comment = Comment.objects.get(id=request.POST['delete_comment'])
-            delete_comment.is_deleted = True
-            delete_comment.save()
+            delete_comment.delete()
         offer.save()
     comment_form = CommentForm(initial={'receiver': str(receiver), 'secret': secret})
     comment_list = Comment.objects.filter(offer=offer, is_deleted=False)

@@ -54,9 +54,7 @@ def offer_create(request):
         if form.is_valid():
             data = form.cleaned_data
             offer = Offer.objects.create(seller=request.user, book=data['book'], price=data['price'],
-                                         worn_degree=data['worn_degree'], worn_explain=data['worn_explain'],
-                                         note_degree=data['note_degree'], note_explain=data['note_explain'],
-                                         other=data['other'])
+                                         quality=data['quality'], explain=data['explain'])
             notify_users = StudentUser.objects.filter(notify_books=request.POST.get('book')).exclude(id=request.user.id)
             create_notification(notify_users, NEW_OFFER, user1=request.user, offer1=offer)
             return redirect('my-offers')
@@ -88,18 +86,13 @@ class OfferDelete(UserPassesTestMixin, DeleteView):
 
 def search_view(request):
     qs = Offer.objects.all()
-    if request.user.is_authenticated:
-        qs = qs.exclude(seller=request.user)
     form = SearchForm(request.GET)
     if form.is_valid():
         data = form.cleaned_data
-        print(data)
         if data['book']:
             qs = qs.filter(book_id=data['book'])
-        if data['min_worn_degree']:
-            qs = qs.filter(worn_degree__in=data['min_worn_degree'])
-        if data['min_note_degree']:
-            qs = qs.filter(note_degree__in=data['min_note_degree'])
+        if data['min_quality']:
+            qs = qs.filter(quality__in=data['min_quality'])
         if data['state'] == UNSOLD or data['state'] == '':
             qs = qs.filter(buyer=None)
         elif data['state'] == UNEXCHANGED:

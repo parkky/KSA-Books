@@ -18,8 +18,7 @@
                     <a>{{ object.seller }}</a>
                     <a>가격: {{ object.price }}</a>
                     <br>
-                    <a>낡은 정도: {{ object.get_worn_degree_display }}</a>
-                    <a>필기 정도: {{ object.get_note_degree_display }}</a>
+                    <a>보관 상태: {{ object.quality }}</a>
                 </li>
             {% endfor %}
         </ul>

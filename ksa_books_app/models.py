@@ -66,11 +66,8 @@ class Offer(models.Model):
     buyer_done = models.BooleanField(null=True, default=False)
     book = models.ForeignKey(Book, on_delete=models.SET_NULL, null=True, verbose_name='책')
     price = models.PositiveIntegerField(verbose_name='판매 가격')
-    worn_degree = models.CharField(choices=QUALITY, max_length=1, verbose_name='낡은 정도')
-    worn_explain = models.TextField(verbose_name='설명', null=True, blank=True)
-    note_degree = models.CharField(choices=QUALITY, max_length=1, verbose_name='필기 정도')
-    note_explain = models.TextField(verbose_name='설명', null=True, blank=True)
-    other = models.TextField(verbose_name='기타 내용', null=True, blank=True)
+    quality = models.CharField(choices=QUALITY, max_length=1, verbose_name='보관 상태', null=True)
+    explain = models.TextField(verbose_name='내용', null=True, blank=True)
     date_time = models.DateTimeField(auto_now_add=True, null=True)
     views = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='views')
 

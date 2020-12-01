@@ -9,9 +9,8 @@
     {% else %}
         <p>구매자: 없음</p>
     {% endif %}
-    <p>낡은 정도: {{ offer.get_worn_degree_display }}<br>{{ offer.worn_explain }}</p>
-    <p>필기 정도: {{ offer.get_note_degree_display }}<br>{{ offer.note_explain }}</p>
-    <p>{{ offer.other }}</p>
+    <p>보관 상태: {{ offer.get_quality_display }}</p>
+    <p>{{ offer.explain }}</p>
     <p>읽은 사람: {{ views }}명</p>
     <p>등록 시간: {{ offer.date_time }}</p>
     <br>

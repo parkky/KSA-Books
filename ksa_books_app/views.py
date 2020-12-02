@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import UpdateView, DeleteView, ListView
 from .models import Book, Course, Subject, Offer, Comment, StudentUser, Notification
 from .models import COMMENT, NEW_OFFER, SOLD_TO_USER, SOLD_TO_OTHER, NEW_WANT, BUYER_CANCEL, SELLER_CANCEL
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.contrib.auth.decorators import permission_required, login_required
 from .forms import SearchForm, CommentForm, OfferForm, OfferUpdateForm, NotificationSettingForm, ChangeNameForm
 from .forms import NEW, CHEAP
@@ -11,6 +11,7 @@ from django.core.paginator import Paginator
 from django.contrib.auth.mixins import UserPassesTestMixin
 from secrets import choice
 from string import ascii_letters, digits
+from django.http import HttpResponseRedirect
 
 
 def create_notification(user_qs, type, user1=None, offer1=None):
@@ -57,7 +58,7 @@ def offer_create(request):
                                          quality=data['quality'], explain=data['explain'])
             notify_users = StudentUser.objects.filter(notify_books=request.POST.get('book')).exclude(id=request.user.id)
             create_notification(notify_users, NEW_OFFER, user1=request.user, offer1=offer)
-            return redirect('my-offers')
+            return HttpResponseRedirect(reverse('my-offers'))
     else:
         form = OfferForm()
     context = {
@@ -176,6 +177,7 @@ def offer_view(request, pk):
             delete_comment = Comment.objects.get(id=request.POST['delete_comment'])
             delete_comment.delete()
         offer.save()
+        return HttpResponseRedirect(reverse('check-offer', args=(pk,)))
     comment_form = CommentForm(initial={'receiver': str(receiver), 'secret': secret})
     comment_list = Comment.objects.filter(offer=offer, is_deleted=False)
     context = {
@@ -245,6 +247,7 @@ def setting(request):
             request.user.notify_sold_to_other = data['notify_sold_to_other']
             request.user.notify_new_want = data['notify_new_want']
             request.user.save()
+            return HttpResponseRedirect(reverse('setting'))
     else:
         notify_form = NotificationSettingForm(initial={
             'notify_books': request.user.notify_books.all(),
@@ -270,6 +273,7 @@ def name_update(request):
             data = name_form.cleaned_data
             request.user.name = data['name']
             request.user.save()
+            return HttpResponseRedirect(reverse('home'))
     form = ChangeNameForm(initial={'name': request.user.name})
     context = {
         'form': form,

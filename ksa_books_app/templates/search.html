@@ -15,10 +15,12 @@
                 <li>
                     <a href={{ object.get_absolute_url }}>{{ object.book.title }}</a>
                     <br>
-                    <a>{{ object.seller }}</a>
-                    <a>가격: {{ object.price }}원</a>
+                    <span>{{ object.seller }}</span>
+                    <span>가격: {{ object.price }}원</span>
                     <br>
-                    <a>보관 상태: {{ object.quality }}</a>
+                    <span>보관 상태: {{ object.quality }}</span>
+                    <br>
+                    <span>{{ object.date_time }}</span>
                 </li>
             {% endfor %}
         </ul>

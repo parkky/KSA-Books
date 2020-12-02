@@ -8,12 +8,16 @@
                 <th>제목</th>
                 <th>판매자</th>
                 <th>구매자</th>
+                <th>가격</th>
+                <th>거래 완료</th>
             </tr>
             {% for sell_offer in past_sell_offers %}
                 <tr>
                     <td><a href="{{ sell_offer.get_absolute_url }}">{{ sell_offer.book }}</a></td>
                     <td>{{ sell_offer.seller }}</td>
                     <td>{{ sell_offer.buyer }}</td>
+                    <td>{{ sell_offer.price }}원</td>
+                    <td>{{ sell_offer.seller_done_time }}</td>
                 </tr>
             {% endfor %}
         </table>
@@ -28,12 +32,16 @@
                 <th>제목</th>
                 <th>판매자</th>
                 <th>구매자</th>
+                <th>가격</th>
+                <th>거래 완료</th>
             </tr>
             {% for buy_offer in past_buy_offers %}
                 <tr>
                     <td><a href="{{ buy_offer.get_absolute_url }}">{{ buy_offer.book }}</a></td>
                     <td>{{ buy_offer.seller }}</td>
                     <td>{{ buy_offer.buyer }}</td>
+                    <td>{{ buy_offer.price }}원</td>
+                    <td>{{ buy_offer.buyer_done_time }}</td>
                 </tr>
             {% endfor %}
         </table>

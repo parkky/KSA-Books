@@ -12,6 +12,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from secrets import choice
 from string import ascii_letters, digits
 from django.http import HttpResponseRedirect
+from datetime import datetime
 
 
 def create_notification(user_qs, type, user1=None, offer1=None):
@@ -167,12 +168,16 @@ def offer_view(request, pk):
             offer.seller_done = False
         elif 'buy-done' in request.POST:
             offer.buyer_done = True
+            offer.buyer_done_time = datetime.now()
         elif 'buy-done-cancel' in request.POST:
             offer.buyer_done = False
+            offer.buyer_done_time = None
         elif 'sell-done' in request.POST:
             offer.seller_done = True
+            offer.seller_done_time = datetime.now()
         elif 'sell-done-cancel' in request.POST:
             offer.seller_done = False
+            offer.seller_done_time = None
         elif 'delete_comment' in request.POST:
             delete_comment = Comment.objects.get(id=request.POST['delete_comment'])
             delete_comment.delete()

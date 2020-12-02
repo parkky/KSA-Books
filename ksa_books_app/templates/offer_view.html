@@ -2,7 +2,7 @@
 
 {% block content %}
     <p>책: {{ offer.book.title }}</p>
-    <p>가격: {{ offer.price }}</p>
+    <p>가격: {{ offer.price }}원</p>
     <p>판매자: {{ offer.seller }}</p>
     {% if offer.buyer %}
         <p>구매자: {{ offer.buyer }}</p>
@@ -66,11 +66,15 @@
     {% endcomment %}
     {% else %}
         {% if user not in want_users %}
-            <form method="post">
-                {% csrf_token %}
-                <input type="hidden" name="want" value="True">
-                <input type="submit" value="구매 신청">
-            </form>
+            {% if offer.seller_done %}
+                <p>이미 종료된 거래입니다.</p>
+            {% else %}
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="want" value="True">
+                    <input type="submit" value="구매 신청">
+                </form>
+            {% endif %}
         {% elif offer.buyer != user %}
             <form method="post">
                 {% csrf_token %}

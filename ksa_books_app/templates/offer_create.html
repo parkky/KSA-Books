@@ -1,9 +1,10 @@
 {% extends 'base_generic.html' %}
 
 {% block content %}
+    <h2>판매</h2>
     <form method="post">
         {% csrf_token %}
-        <p>정말로 삭제하겠습니까?</p>
+        {{ form.as_p }}
         <input type="submit" value="확인">
     </form>
-{% endblock %}
+{%  endblock %}

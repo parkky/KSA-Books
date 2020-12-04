@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.views.generic import UpdateView, DeleteView, ListView
 from .models import Book, Course, Subject, Offer, Comment, StudentUser, Notification
 from .models import COMMENT, NEW_OFFER, SOLD_TO_USER, SOLD_TO_OTHER, NEW_WANT, BUYER_CANCEL, SELLER_CANCEL
@@ -65,11 +65,11 @@ def offer_create(request):
     context = {
         'form': form,
     }
-    return render(request, 'offer_form.html', context=context)
+    return render(request, 'offer_create.html', context=context)
 
 
 class OfferUpdate(UserPassesTestMixin, UpdateView):
-    template_name = 'offer_form.html'
+    template_name = 'offer_update.html'
     model = Offer
     form_class = OfferUpdateForm
 

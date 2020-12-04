@@ -1,19 +1,48 @@
 {% extends 'base_generic.html' %}
 
+{% block style %}
+    <style>
+        .offer {
+            display: block;
+            border-radius: 5px;
+            background-color: #e0e0e0;
+            border: 1px solid black;
+        }
+        .left {
+            float: left;
+        }
+        .right {
+            float: right;
+        }
+        a, span {
+            padding: 5px;
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
-    <p>책: {{ offer.book.title }}</p>
-    <p>가격: {{ offer.price }}원</p>
-    <p>판매자: {{ offer.seller }}</p>
-    {% if offer.buyer %}
-        <p>구매자: {{ offer.buyer }}</p>
-    {% else %}
-        <p>구매자: 없음</p>
-    {% endif %}
-    <p>보관 상태: {{ offer.get_quality_display }}</p>
-    <p>{{ offer.explain }}</p>
-    <p>읽은 사람: {{ views }}명</p>
-    <p>등록 시간: {{ offer.date_time }}</p>
     <br>
+    <div class="offer">
+        <div class="left">
+            <span>{{ offer.book.title }}</span>
+        </div>
+        <div class="right">
+            <span>판매: {{ offer.seller }}</span>
+            <span>구매: {{ offer.buyer }}</span>
+        </div>
+        <br>
+        <div class="left">
+            <span>가격: {{ offer.price }}원</span>
+            <span>보관 상태: {{ offer.get_quality_display }}</span>
+        </div>
+        <br><br>
+        <span>{{ offer.explain }}</span>
+        <br><br>
+        <span>읽은 사람: {{ views }}명</span>
+        <div class="right">
+            <span>{{ offer.date_time }}</span>
+        </div>
+    </div>
     {% comment %}
     Seller
     No one wants to buy:
@@ -55,8 +84,8 @@
         {% else %}
             <p>구매를 원하는 사람이 없음</p>
         {% endif %}
-        <a href="{% url 'update-offer' pk=offer.pk %}">Update</a>
-        <a href="{% url 'delete-offer' pk=offer.pk %}">Delete</a>
+        <a href="{% url 'update-offer' pk=offer.pk %}">수정</a>
+        <a href="{% url 'delete-offer' pk=offer.pk %}">삭제</a>
     {% comment %}
     Buyer
     Before clicking buy: want
@@ -104,7 +133,7 @@
     <form method="post">
         {% csrf_token %}
         <table>
-            {{ comment_form.as_table }}
+            {{ comment_form.as_p }}
         </table>
         <input type="submit" value="댓글 달기">
     </form>

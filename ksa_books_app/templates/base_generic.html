@@ -5,9 +5,19 @@
 <head>
     <style>
         table, th, td {
-            border: 1px solid #000000;
+            border: 2px solid #000000;
             border-collapse: collapse;
-            padding: 5px;
+            padding: 3px;
+            text-align: center;
+        }
+        table {
+            width: 1000px;
+        }
+        th {
+            background-color: #e0e0ff;
+        }
+        td {
+            background-color: #f0fff0;
         }
         p {
             word-break: keep-all;
@@ -18,26 +28,60 @@
         }
         .navigation {
             overflow: hidden;
-            background-color: lightgray;
-            border-top: 1px solid black;
+            background-color: #e0e0e0;
             border-bottom: 1px solid black;
         }
         .navigation a, .navigation span {
             float: left;
             display: block;
             text-align: center;
-            padding: 5px 5px;
+            padding: 6px;
             text-decoration: none;
+            font-weight: bold;
+            font-size: large;
         }
         .navigation a {
-            color: black;
+            color: darkblue;
         }
         .navigation span {
-            color: blue;
+            color: black;
         }
         .navigation a:hover {
             background-color: gray;
             color: white;
+        }
+        .user {
+            float: right;
+        }
+        h2 {
+            color: saddlebrown;
+        }
+        li {
+            margin: 5px;
+        }
+        form {
+            background-color: #f0f0f0;
+            padding: 5px;
+            border: 1px solid black;
+            margin: 5px 0;
+            box-shadow: 0 0 5px gray;
+            border-radius: 5px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type='submit'] {
+            font-size: large;
+        }
+        .content a[href] {
+            color: saddlebrown;
+            text-decoration: none;
+        }
+        .content a[href]:hover {
+            color: #ff8a26;
+        }
+        .content a[href][target] {
+            text-decoration: underline;
         }
     </style>
     {% block style %}{% endblock %}
@@ -46,12 +90,24 @@
 </head>
 <body>
     <div class="container">
-
+        <div class="navigation">
+            <div class="user">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'logout' %}">로그아웃</a>
+                    <span>{{ user }}</span>
+                    {% if user.is_international %}
+                        <a href="{% url 'change-name' %}">Change Name</a>
+                    {% endif %}
+                {% else %}
+                    <a href="{% url 'login' %}">로그인</a>
+                {% endif %}
+            </div>
+        </div>
         <div class="navigation">
             <span>KSABooks</span>
             <a href="{% url 'home' %}">시작</a>
             <a href="{% url 'about' %}">정보</a>
-            <a href="{% url 'sell' %}">판매하기</a>
+            <a href="{% url 'sell' %}">판매</a>
             <a href="{% url 'search' %}">검색</a>
             <a href="{% url 'my-offers' %}">내 거래</a>
             <a href="{% url 'past-transaction' %}">종료된 거래</a>
@@ -62,21 +118,11 @@
                 <a href="{% url 'notification' %}">알림({{ user.unread_notification }})</a>
             {% endif %}
             <a href="{% url 'setting' %}">설정</a>
-            {% if user.is_authenticated %}
-                <a href="{% url 'logout' %}">로그아웃</a>
-            {% else %}
-                <a href="{% url 'login' %}">로그인</a>
-            {% endif %}
-            {% if user.is_authenticated %}
-                <span>{{ user }}</span>
-                {% if user.is_international %}
-                    <a href="{% url 'change-name' %}">Change Name</a>
-                {% endif %}
-            {% endif %}
         </div>
-        <br>
 
-        {% block content %}{% endblock %}
+        <div class="content">
+            {% block content %}{% endblock %}
+        </div>
 
         {% block pagination %}
             {% if is_paginated %}

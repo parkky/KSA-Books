@@ -10,6 +10,10 @@ QUALITY_STANDARD = (
 
 
 class OfferForm(ModelForm):
+    price = forms.IntegerField(
+        widget=forms.NumberInput(attrs={'step': 1000}),
+    )
+
     class Meta:
         model = Offer
         fields = ['book', 'price', 'quality', 'explain']

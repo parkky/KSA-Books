@@ -1,9 +1,10 @@
 {% extends 'base_generic.html' %}
 
 {% block content %}
+    <h2>종료된 거래</h2>
+    <h3>판매한 책</h3>
     {% if past_sell_offers %}
         <table>
-            <caption>판매한 책</caption>
             <tr>
                 <th>제목</th>
                 <th>판매자</th>
@@ -24,10 +25,9 @@
     {% else %}
         <p>판매한 책이 없습니다.</p>
     {% endif %}
-    <br>
+    <h3>구매한 책</h3>
     {% if past_buy_offers %}
         <table>
-            <caption>구매한 책</caption>
             <tr>
                 <th>제목</th>
                 <th>판매자</th>

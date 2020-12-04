@@ -1,11 +1,12 @@
 {% extends 'base_generic.html' %}
 
 {% block content %}
-    <h2>알림 설정</h2>
+    <h2>설정</h2>
+    <h3>알림 관련 설정</h3>
     <form method="post">
         {% csrf_token %}
         <table>
-            {{ notify_form.as_table }}
+            {{ notify_form.as_p }}
         </table>
         <input type="submit" value="확인">
     </form>

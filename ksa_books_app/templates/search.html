@@ -1,26 +1,56 @@
 {% extends 'base_generic.html' %}
 
+{% block style %}
+    <style>
+        ul {
+            padding: unset;
+        }
+        li {
+            display: block;
+            border-radius: 5px;
+            background-color: #e0e0e0;
+            border: 1px solid black;
+        }
+        .left {
+            float: left;
+        }
+        .right {
+            float: right;
+        }
+        a, span {
+            padding: 3px;
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
+    <h2>검색</h2>
     <form method="get">
         {% csrf_token %}
         <table>
             {{ form.as_p }}
         </table>
-        <br>
         <input type="submit" value="검색">
     </form>
     {% if page_obj %}
         <ul>
             {% for object in page_obj %}
                 <li>
-                    <a href={{ object.get_absolute_url }}>{{ object.book.title }}</a>
+                    <div class="left">
+                        <a href={{ object.get_absolute_url }}>{{ object.book.title }}</a>
+                    </div>
+                    <div class="right">
+                        <span>{{ object.seller }}</span>
+                    </div>
                     <br>
-                    <span>{{ object.seller }}</span>
-                    <span>가격: {{ object.price }}원</span>
+                    <div class="left">
+                        <span>가격: {{ object.price }}원</span>
+                        <span>보관 상태: {{ object.get_quality_display }}</span>
+                    </div>
+                    <div class="right">
+                        <span>{{ object.date_time }}</span>
+                    </div>
                     <br>
-                    <span>보관 상태: {{ object.quality }}</span>
-                    <br>
-                    <span>{{ object.date_time }}</span>
                 </li>
             {% endfor %}
         </ul>
